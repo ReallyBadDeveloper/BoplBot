@@ -20,6 +20,9 @@ const commands = [
   new SlashCommandBuilder().setName('abilities').setDescription('Displays every ability in Bopl Battle!'),
   new SlashCommandBuilder().setName('help').setDescription('Provides help while using Bopl Bot.'),
   new SlashCommandBuilder().setName('ping').setDescription('Checks to see if the bot is online.'),
+
+  // MAKE SURE THIS IS LAST!
+  new SlashCommandBuilder(),
 ];
 
 const rest = new REST({ version: '10' }).setToken(TOKEN);
@@ -74,6 +77,12 @@ client.on('interactionCreate', async (interaction,message) => {
             ephemeral: isHidden,
         }
     );
+  }
+  if (interaction.commandName == 'ping') {
+    interaction.reply({
+      content: 'Pong! :ping-pong:',
+      ephemeral: isHidden,
+    });
   }
 });
 
