@@ -2,13 +2,19 @@
 const dotenv = require('dotenv').config();
 const TOKEN = process.env.TOKEN;
 const CLIENT_ID = process.env.CLIENT_ID;
-const { EmbedBuilder, SlashCommandStringOption } = require('discord.js');
+const { EmbedBuilder, SlashCommandStringOption, Colors } = require('discord.js');
 const { REST, Routes, SlashCommandBuilder } = require('discord.js');
 const { abilities } = require('./abilities');
 const fs = require('fs');
 const path = require('path');
 var configFile;
 var dev = true;
+var embedColors = {
+  boplYellow: 0xfefe66,
+  green: 0x54ff47,
+  orange: 0xd99f3b,
+  red: 0xbf2626,
+};
 
 var randomArr = function(arr) {
     console.log((Math.random(1,arr.length+1) * 10).toFixed(0));
@@ -20,8 +26,7 @@ const commands = [
   new SlashCommandBuilder().setName('random-combo').setDescription('Sends a random combination of Bopl Battle abilities!'),
   new SlashCommandBuilder().setName('abilities').setDescription('Displays every ability in Bopl Battle!'),
   new SlashCommandBuilder().setName('help').setDescription('Provides help while using Bopl Bot.'),
-  new SlashCommandBuilder().setName('ping').setDescription('Checks to see if the bot is online.'),
-  new SlashCommandBuilder().setName('placeholder').setDescription('If you see this, alert the developer!'),
+  new SlashCommandBuilder().setName('ping').setDescription('Checks to see if the bot is online.')
 ];
 
 const rest = new REST({ version: '10' }).setToken(TOKEN);
@@ -87,7 +92,7 @@ client.on('interactionCreate', async (interaction,message) => {
   if (interaction.commandName == 'ping') {
     interaction.reply({
       embeds: [
-        new EmbedBuilder().setColor(0xfefe66).setTitle('Pong! :ping_pong:')
+        new EmbedBuilder().setColor(embedColors.green).setTitle('Pong! :ping_pong:')
       ],
       ephemeral: isHidden,
     });
