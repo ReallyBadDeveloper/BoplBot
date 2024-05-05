@@ -17,7 +17,7 @@ var embedColors = {
 };
 
 var randomArr = function(arr) {
-    console.log((Math.random(1,arr.length+1) * 10).toFixed(0));
+    // console.log((Math.random(1,arr.length+1) * 10).toFixed(0));
     return arr[(Math.random(1,arr.length+1) * 10).toFixed(0)];
 }
 
@@ -65,7 +65,7 @@ client.on('interactionCreate', async (interaction,message) => {
     if (interaction.commandName == 'random-combo') {
         var ability1 = client.emojis.cache.get(randomArr(abilities));
         var ability2 = client.emojis.cache.get(randomArr(abilities));
-    var ability3 = client.emojis.cache.get(randomArr(abilities));
+        var ability3 = client.emojis.cache.get(randomArr(abilities));
 
     interaction.reply({ content: `${ability1} ${ability2} ${ability3}`, ephemeral: isHidden });
   }
