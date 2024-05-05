@@ -40,7 +40,11 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
   client.user.setActivity('Bopl Battle!', { type: ActivityType.Playing});
-  client.channels.fetch('1236702177515409469').then(channel=>channel.send("# Bot is online! :ping_pong:\n### Currenty hosted on Really Bad Dev's computer!"));
+  client.channels.fetch('1236702177515409469').then(channel=>channel.send({
+    embeds: [
+      new EmbedBuilder().setColor(0x54ff47).setTitle('Bot is online! :wireless:').setDescription("Currently being hosted on Really Bad Dev's computer!")
+    ]
+  }));
 });
 
 client.on('interactionCreate', async (interaction,message) => {
