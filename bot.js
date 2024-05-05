@@ -86,7 +86,9 @@ client.on('interactionCreate', async (interaction,message) => {
   }
   if (interaction.commandName == 'ping') {
     interaction.reply({
-      content: 'Pong! :ping-pong:',
+      embeds: [
+        new EmbedBuilder().setColor(0xfefe66).setTitle('Pong! :ping_pong:')
+      ],
       ephemeral: isHidden,
     });
   }
