@@ -20,9 +20,7 @@ const commands = [
   new SlashCommandBuilder().setName('abilities').setDescription('Displays every ability in Bopl Battle!'),
   new SlashCommandBuilder().setName('help').setDescription('Provides help while using Bopl Bot.'),
   new SlashCommandBuilder().setName('ping').setDescription('Checks to see if the bot is online.'),
-
-  // MAKE SURE THIS IS LAST!
-  new SlashCommandBuilder(),
+  new SlashCommandBuilder().setName('placeholder').setDescription('If you see this, alert the developer!'),
 ];
 
 const rest = new REST({ version: '10' }).setToken(TOKEN);
@@ -42,7 +40,7 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
   client.user.setActivity('Bopl Battle!', { type: ActivityType.Playing});
-  client.channels.fetch('1236702177515409469').then(channel=>channel.send("# Bot is online!\n### Currenty hosted on Really Bad Dev's computer!"));
+  client.channels.fetch('1236702177515409469').then(channel=>channel.send("# Bot is online! :ping_pong:\n### Currenty hosted on Really Bad Dev's computer!"));
 });
 
 client.on('interactionCreate', async (interaction,message) => {
@@ -73,7 +71,8 @@ client.on('interactionCreate', async (interaction,message) => {
   if (interaction.commandName == 'help') {
     interaction.reply(
         {
-            content: '# Commands\n- `/help` - Shows this message.\n- `/random-combo` - Gives you three random Bopl Battle abilities to use in-game.\n- `/abilities` - Gives you every ability in Bopl Battle.',
+            //content: '# Commands\n- `/help` - Shows this message.\n- `/random-combo` - Gives you three random Bopl Battle abilities to use in-game.\n- `/abilities` - Gives you every ability in Bopl Battle.',
+            embeds: [new EmbedBuilder().setColor(0xfefe66).setTitle('Commands').setDescription('- `/help` - Shows this message.\n- `/random-combo` - Gives you three random Bopl Battle abilities to use in-game.\n- `/abilities` - Gives you every ability in Bopl Battle.')],
             ephemeral: isHidden,
         }
     );
