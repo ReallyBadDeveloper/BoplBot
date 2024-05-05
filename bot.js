@@ -2,7 +2,7 @@
 const dotenv = require('dotenv').config();
 const TOKEN = process.env.TOKEN;
 const CLIENT_ID = process.env.CLIENT_ID;
-const { EmbedBuilder, SlashCommandStringOption, Colors } = require('discord.js');
+const { EmbedBuilder, SlashCommandStringOption, ActionRowBuilder, ButtonBuilder, ButtonStyle, } = require('discord.js');
 const { REST, Routes, SlashCommandBuilder } = require('discord.js');
 const { abilities } = require('./abilities');
 const fs = require('fs');
@@ -84,7 +84,7 @@ client.on('interactionCreate', async (interaction,message) => {
     interaction.reply(
         {
             //content: '# Commands\n- `/help` - Shows this message.\n- `/random-combo` - Gives you three random Bopl Battle abilities to use in-game.\n- `/abilities` - Gives you every ability in Bopl Battle.',
-            embeds: [new EmbedBuilder().setColor(0xfefe66).setTitle('Commands').setDescription('- `/help` - Shows this message.\n- `/random-combo` - Gives you three random Bopl Battle abilities to use in-game.\n- `/abilities` - Gives you every ability in Bopl Battle.')],
+            embeds: [new EmbedBuilder().setColor(0xfefe66).setTitle('Commands').setDescription('- `/help` - Shows this message.\n- `/random-combo` - Gives you three random Bopl Battle abilities to use in-game.\n- `/abilities` - Gives you every ability in Bopl Battle.\n- `/ping` - Replies with Pong, mainly for command testing.')],
             ephemeral: isHidden,
         }
     );
@@ -98,6 +98,5 @@ client.on('interactionCreate', async (interaction,message) => {
     });
   }
 });
-
 // lets get it started 🔥🔥🔥🔥🔥🔥
 client.login(TOKEN);
