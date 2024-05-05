@@ -8,6 +8,7 @@ const { abilities } = require('./abilities');
 const fs = require('fs');
 const path = require('path');
 var configFile;
+var dev = true;
 
 var randomArr = function(arr) {
     console.log((Math.random(1,arr.length+1) * 10).toFixed(0));
@@ -40,11 +41,13 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
   client.user.setActivity('Bopl Battle!', { type: ActivityType.Playing});
-  client.channels.fetch('1236702177515409469').then(channel=>channel.send({
-    embeds: [
-      new EmbedBuilder().setColor(0x54ff47).setTitle('Bot is online! :wireless:').setDescription("Currently being hosted on Really Bad Dev's computer!")
-    ]
-  }));
+  if (!dev) {
+    client.channels.fetch('1236702177515409469').then(channel=>channel.send({
+      embeds: [
+        new EmbedBuilder().setColor(0x54ff47).setTitle('Bot is online! :wireless:').setDescription("Currently being hosted on Really Bad Dev's computer!")
+      ]
+    }));
+  }
 });
 
 client.on('interactionCreate', async (interaction,message) => {
