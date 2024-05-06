@@ -21,20 +21,25 @@ var randomArr = function(arr) {
     return arr[(Math.random(1,arr.length+1) * 10).toFixed(0)];
 }
 
+var commandsList = [
+  ['random-combo','Sends a random combination of Bopl Battle abilities!'],
+  ['abilities','Displays every ability in Bopl Battle!'],
+  ['help','Provides help while using Bopl Bot.'],
+  ['ping','Checks to see if the bot is online.']
+]
 
-const commands = [
-  new SlashCommandBuilder().setName('random-combo').setDescription('Sends a random combination of Bopl Battle abilities!'),
-  new SlashCommandBuilder().setName('abilities').setDescription('Displays every ability in Bopl Battle!'),
-  new SlashCommandBuilder().setName('help').setDescription('Provides help while using Bopl Bot.'),
-  new SlashCommandBuilder().setName('ping').setDescription('Checks to see if the bot is online.')
-];
+const botCommands = [];
+
+for (const i in commandsList) {
+  botCommands.push(new SlashCommandBuilder().setName(commandsList[i][0]).setDescription(commandsList[i][0]));
+}
 
 const rest = new REST({ version: '10' }).setToken(TOKEN);
 
 try {
   console.log('Started refreshing application (/) commands.');
 
-  rest.put(Routes.applicationCommands(CLIENT_ID), { body: commands });
+  rest.put(Routes.applicationCommands(CLIENT_ID), { body: botCommands });
 
   console.log('Successfully reloaded application (/) commands.');
 } catch (error) {
@@ -49,7 +54,7 @@ client.on('ready', () => {
   if (!dev) {
     client.channels.fetch('1236702177515409469').then(channel=>channel.send({
       embeds: [
-        new EmbedBuilder().setColor(0x54ff47).setTitle('Bot is online! :wireless:').setDescription("Currently being hosted on Really Bad Dev's computer!")
+        new EmbedBuilder().setColor(embedColors.green).setTitle('Bot is online! :wireless:').setDescription("Currently being hosted on Really Bad Dev's computer!")
       ]
     }));
   }
@@ -67,7 +72,9 @@ client.on('interactionCreate', async (interaction,message) => {
         var ability2 = client.emojis.cache.get(randomArr(abilities));
         var ability3 = client.emojis.cache.get(randomArr(abilities));
 
-    interaction.reply({ content: `${ability1} ${ability2} ${ability3}`, ephemeral: isHidden });
+    interaction.reply({ embeds: [
+      new EmbedBuilder().setColor(embedColors.boplYellow).setTitle('Random Abilities').setDescription(`${ability1}${ability2}${ability3}`)
+    ], ephemeral: isHidden });
   }
   if (interaction.commandName == 'abilities') {
     var emojiString;
@@ -78,13 +85,22 @@ client.on('interactionCreate', async (interaction,message) => {
             emojiString = emojiString + `${client.emojis.cache.get(abilities[emoji])} `;
         }
     }
-    interaction.reply({ content: emojiString, ephemeral: isHidden });
+    interaction.reply({ embeds: [
+      new EmbedBuilder().setColor(embedColors.boplYellow).setTitle('Abilities').setDescription(emojiString)
+    ], ephemeral: isHidden });
   }
   if (interaction.commandName == 'help') {
+    var cmdString;
+    for (var i in commandsList) {
+      if (!cmdString) {
+        cmdString = '- `/' + commandsList[i][0] + '` - ' + commandsList[i][1] + '\n';
+      } else {
+        cmdString = cmdString + '- `/' + commandsList[i][0] + '` - ' + commandsList[i][1] + '\n';
+      }
+    }
     interaction.reply(
         {
-            //content: '# Commands\n- `/help` - Shows this message.\n- `/random-combo` - Gives you three random Bopl Battle abilities to use in-game.\n- `/abilities` - Gives you every ability in Bopl Battle.',
-            embeds: [new EmbedBuilder().setColor(embedColors.boplYellow).setTitle('Commands').setDescription('- `/help` - Shows this message.\n- `/random-combo` - Gives you three random Bopl Battle abilities to use in-game.\n- `/abilities` - Gives you every ability in Bopl Battle.\n- `/ping` - Replies with Pong, mainly for command testing.')],
+            embeds: [new EmbedBuilder().setColor(embedColors.boplYellow).setTitle('Commands').setDescription(cmdString)],
             ephemeral: isHidden,
         }
     );
