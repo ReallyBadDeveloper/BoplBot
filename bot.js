@@ -84,7 +84,7 @@ client.on('interactionCreate', async (interaction,message) => {
     interaction.reply(
         {
             //content: '# Commands\n- `/help` - Shows this message.\n- `/random-combo` - Gives you three random Bopl Battle abilities to use in-game.\n- `/abilities` - Gives you every ability in Bopl Battle.',
-            embeds: [new EmbedBuilder().setColor(0xfefe66).setTitle('Commands').setDescription('- `/help` - Shows this message.\n- `/random-combo` - Gives you three random Bopl Battle abilities to use in-game.\n- `/abilities` - Gives you every ability in Bopl Battle.\n- `/ping` - Replies with Pong, mainly for command testing.')],
+            embeds: [new EmbedBuilder().setColor(embedColors.boplYellow).setTitle('Commands').setDescription('- `/help` - Shows this message.\n- `/random-combo` - Gives you three random Bopl Battle abilities to use in-game.\n- `/abilities` - Gives you every ability in Bopl Battle.\n- `/ping` - Replies with Pong, mainly for command testing.')],
             ephemeral: isHidden,
         }
     );
