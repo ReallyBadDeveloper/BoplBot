@@ -27,7 +27,7 @@ var commandsList = [
   ['abilities','Displays every ability in Bopl Battle!'],
   ['help','Provides help while using Bopl Bot.'],
   ['ping','Checks to see if the bot is online.'],
-  ['music','Plays Bopl Battle music in your current voice channel!']
+  // ['music','Plays Bopl Battle music in your current voice channel!']
 ]
 
 const botCommands = [];
@@ -51,6 +51,8 @@ const { Client, GatewayIntentBits, channel, ActivityType } = require('discord.js
 const client = new Client({ intents: [
   GatewayIntentBits.Guilds,
   GatewayIntentBits.GuildVoiceStates,
+  GatewayIntentBits.GuildMessages,
+  GatewayIntentBits.MessageContent,
 ] });
 
 client.on('ready', () => {
@@ -62,6 +64,12 @@ client.on('ready', () => {
         new EmbedBuilder().setColor(embedColors.green).setTitle('Bot is online! :wireless:').setDescription("Currently being hosted on Really Bad Dev's computer!")
       ]
     }));
+  }
+});
+
+client.on('messageCreate', (message) => {
+  if (message.content.toLowerCase().includes('kill yourself') || message.content.toLowerCase().includes('kys')) {
+    message.reply('https://media1.tenor.com/m/c5a_h8U1MzkAAAAC/nuh-uh-beocord.gif')
   }
 });
 
