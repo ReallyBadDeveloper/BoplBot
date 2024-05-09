@@ -4,11 +4,12 @@ const TOKEN = process.env.TOKEN;
 const CLIENT_ID = process.env.CLIENT_ID;
 const { EmbedBuilder, SlashCommandStringOption, ActionRowBuilder, ButtonBuilder, ButtonStyle, } = require('discord.js');
 const { REST, Routes, SlashCommandBuilder } = require('discord.js');
+//const { createAudioPlayer, noSubscriberBehavior, joinVoiceChannel, createAudioResource } = require('@discordjs/voice');
 const { abilities } = require('./abilities');
 const fs = require('fs');
 const path = require('path');
 var configFile;
-var dev = false;
+var dev = true;
 var embedColors = {
   boplYellow: 0xfefe66,
   green: 0x54ff47,
@@ -25,13 +26,14 @@ var commandsList = [
   ['random-combo','Sends a random combination of Bopl Battle abilities!'],
   ['abilities','Displays every ability in Bopl Battle!'],
   ['help','Provides help while using Bopl Bot.'],
-  ['ping','Checks to see if the bot is online.']
+  ['ping','Checks to see if the bot is online.'],
+  ['music','Plays Bopl Battle music in your current voice channel!']
 ]
 
 const botCommands = [];
 
 for (const i in commandsList) {
-  botCommands.push(new SlashCommandBuilder().setName(commandsList[i][0]).setDescription(commandsList[i][0]));
+  botCommands.push(new SlashCommandBuilder().setName(commandsList[i][0]).setDescription(commandsList[i][1]));
 }
 
 const rest = new REST({ version: '10' }).setToken(TOKEN);
@@ -46,7 +48,10 @@ try {
   console.error(error);
 }
 const { Client, GatewayIntentBits, channel, ActivityType } = require('discord.js');
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({ intents: [
+  GatewayIntentBits.Guilds,
+  GatewayIntentBits.GuildVoiceStates,
+] });
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -113,6 +118,24 @@ client.on('interactionCreate', async (interaction,message) => {
       ephemeral: isHidden,
     });
   }
+  /* if (interaction.commandName == 'music') {
+        var connection = joinVoiceChannel({
+          channelId: interaction.member.voice.channel,
+          guildId: interaction.guildId,
+          adapterCreator: interaction.guild.voiceAdapterCreator,
+        });
+        console.log('1');
+        const player = createAudioPlayer();
+        console.log('2');
+        const resource = createAudioResource('/media/music.mp3');
+        console.log('3');
+        connection.subscribe(player);
+        console.log('4');
+        player.play(resource);
+        console.log('5');
+        interaction.reply({content: 'Okay!', ephemeral: isHidden});
+        console.log('Finished!');
+    } */
 });
 // lets get it started 🔥🔥🔥🔥🔥🔥
 client.login(TOKEN);
