@@ -2,9 +2,9 @@
 const dotenv = require('dotenv').config();
 const TOKEN = process.env.TOKEN;
 const CLIENT_ID = process.env.CLIENT_ID;
-const { EmbedBuilder, SlashCommandStringOption, ActionRowBuilder, ButtonBuilder, ButtonStyle, } = require('discord.js');
+const { EmbedBuilder, SlashCommandStringOption, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField, } = require('discord.js');
 const { REST, Routes, SlashCommandBuilder } = require('discord.js');
-//const { createAudioPlayer, noSubscriberBehavior, joinVoiceChannel, createAudioResource } = require('@discordjs/voice');
+const { createAudioPlayer, noSubscriberBehavior, joinVoiceChannel, createAudioResource } = require('@discordjs/voice');
 const { abilities } = require('./abilities');
 const fs = require('fs');
 const path = require('path');
@@ -27,7 +27,8 @@ var commandsList = [
   ['abilities','Displays every ability in Bopl Battle!'],
   ['help','Provides help while using Bopl Bot.'],
   ['ping','Checks to see if the bot is online.'],
-  // ['music','Plays Bopl Battle music in your current voice channel!']
+  ['music','Plays Bopl Battle music in your current voice channel!'],
+  ['disconnect','Disconnects Bopl Bot from your voice channel.']
 ]
 
 const botCommands = [];
@@ -57,7 +58,7 @@ const client = new Client({ intents: [
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
-  client.user.setActivity('Bopl Battle!', { type: ActivityType.Playing});
+  client.user.setActivity(client.guilds.cache.size + ' servers', { type: ActivityType.Watching});
   if (!dev) {
     client.channels.fetch('1236702177515409469').then(channel=>channel.send({
       embeds: [
@@ -85,7 +86,7 @@ client.on('interactionCreate', async (interaction,message) => {
         var ability2 = client.emojis.cache.get(randomArr(abilities));
         var ability3 = client.emojis.cache.get(randomArr(abilities));
 
-    interaction.reply({ embeds: [
+    await interaction.reply({ embeds: [
       new EmbedBuilder().setColor(embedColors.boplYellow).setTitle('Random Abilities').setDescription(`${ability1}${ability2}${ability3}`)
     ], ephemeral: isHidden });
   }
@@ -98,7 +99,7 @@ client.on('interactionCreate', async (interaction,message) => {
             emojiString = emojiString + `${client.emojis.cache.get(abilities[emoji])} `;
         }
     }
-    interaction.reply({ embeds: [
+    await interaction.reply({ embeds: [
       new EmbedBuilder().setColor(embedColors.boplYellow).setTitle('Abilities').setDescription(emojiString)
     ], ephemeral: isHidden });
   }
@@ -111,7 +112,7 @@ client.on('interactionCreate', async (interaction,message) => {
         cmdString = cmdString + '- `/' + commandsList[i][0] + '` - ' + commandsList[i][1] + '\n';
       }
     }
-    interaction.reply(
+    await interaction.reply(
         {
             embeds: [new EmbedBuilder().setColor(embedColors.boplYellow).setTitle('Commands').setDescription(cmdString)],
             ephemeral: isHidden,
@@ -119,31 +120,49 @@ client.on('interactionCreate', async (interaction,message) => {
     );
   }
   if (interaction.commandName == 'ping') {
-    interaction.reply({
+    await interaction.reply({
       embeds: [
         new EmbedBuilder().setColor(embedColors.green).setTitle('Pong! :ping_pong:')
       ],
       ephemeral: isHidden,
     });
   }
-  /* if (interaction.commandName == 'music') {
-        var connection = joinVoiceChannel({
-          channelId: interaction.member.voice.channel,
-          guildId: interaction.guildId,
-          adapterCreator: interaction.guild.voiceAdapterCreator,
-        });
-        console.log('1');
-        const player = createAudioPlayer();
-        console.log('2');
-        const resource = createAudioResource('/media/music.mp3');
-        console.log('3');
-        connection.subscribe(player);
-        console.log('4');
-        player.play(resource);
-        console.log('5');
-        interaction.reply({content: 'Okay!', ephemeral: isHidden});
-        console.log('Finished!');
-    } */
+  var connection = joinVoiceChannel({
+    channelId: interaction.member.voice.channel.id,
+    guildId: interaction.guildId,
+    adapterCreator: interaction.guild.voiceAdapterCreator,
+    selfDeaf: false,
+    selfMute: false
+  });
+  var connector;
+  if (interaction.commandName == 'music') {
+      connector = interaction.user.id
+      const player = createAudioPlayer();
+      const resource = createAudioResource(__dirname + '/media/music.mp3');
+      player.play(resource);
+      connection.subscribe(player);
+      player.on('error', error => {
+        console.error(error.message)
+      });
+      player.on('end', () => { 
+        connection.disconnect();
+      });
+      await interaction.reply({content: 'Okay!', ephemeral: isHidden});
+  }
+  if (interaction.commandName == 'disconnect') {
+    if (interaction.user.id == connector || interaction.member.permissions.has(PermissionsBitField.Flags.MuteMembers)) {
+      connection.disconnect();
+      await interaction.reply({
+        embeds: [new EmbedBuilder().setColor(embedColors.boplYellow).setTitle('Success!').setDescription('Successfully left the voice channel!')],
+        ephemeral: isHidden
+      });
+    } else {
+      await interaction.reply({
+        embeds: [new EmbedBuilder().setColor(embedColors.red).setTitle('Whoops!').setDescription("You don't have the permissions to do that.\n**Required Permissions:**\n- `Mute Members`\n- `Initially add the bot to the voice channel`")],
+        ephemeral: isHidden
+      });
+    }
+  }
 });
 // lets get it started 🔥🔥🔥🔥🔥🔥
 client.login(TOKEN);
