@@ -9,7 +9,7 @@ const { abilities } = require('./abilities');
 const fs = require('fs');
 const path = require('path');
 var configFile;
-var dev = true;
+var dev = false;
 var embedColors = {
   boplYellow: 0xfefe66,
   green: 0x54ff47,
@@ -161,7 +161,7 @@ client.on('interactionCreate', async (interaction,message) => {
     if (interaction.user.id == connector || interaction.member.permissions.has(PermissionsBitField.Flags.MuteMembers)) {
       connection.disconnect();
       await interaction.reply({
-        embeds: [new EmbedBuilder().setColor(embedColors.boplYellow).setTitle('Success!').setDescription('Successfully left the voice channel!')],
+        embeds: [new EmbedBuilder().setColor(embedColors.green).setTitle('Success!').setDescription('Successfully left the voice channel!')],
         ephemeral: isHidden
       });
     } else {
