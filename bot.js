@@ -18,8 +18,8 @@ var embedColors = {
 };
 
 var randomArr = function(arr) {
-    // console.log((Math.random(1,arr.length+1) * 10).toFixed(0));
-    return arr[(Math.random(1,arr.length+1) * 10).toFixed(0)];
+  return arr.at(arr.length*Math.random())
+
 }
 
 var commandsList = [
@@ -30,6 +30,14 @@ var commandsList = [
   ['music','Plays Bopl Battle music in your current voice channel!'],
   ['disconnect','Disconnects Bopl Bot from your voice channel.']
 ]
+
+var musicArr = [
+  '/media/1.mp3',
+  '/media/2.mp3',
+  '/media/3.mp3',
+  '/media/4.mp3',
+  '/media/5.mp3'
+];
 
 const botCommands = [];
 
@@ -138,7 +146,7 @@ client.on('interactionCreate', async (interaction,message) => {
   if (interaction.commandName == 'music') {
       connector = interaction.user.id
       const player = createAudioPlayer();
-      const resource = createAudioResource(__dirname + '/media/music.mp3');
+      const resource = await createAudioResource(__dirname + randomArr(musicArr));
       player.play(resource);
       connection.subscribe(player);
       player.on('error', error => {
