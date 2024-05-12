@@ -142,6 +142,8 @@ client.on('interactionCreate', async (interaction,message) => {
   var connection;
   var connector;
   if (interaction.commandName == 'music') {
+    try {
+    if (interaction.member.voice.channel) {
       connection = joinVoiceChannel({
         channelId: interaction.member.voice.channel.id,
         guildId: interaction.guildId,
@@ -160,7 +162,18 @@ client.on('interactionCreate', async (interaction,message) => {
       player.on('end', () => { 
         connection.disconnect();
       });
-      await interaction.reply({content: 'Okay!', ephemeral: isHidden});
+      await interaction.reply({ embeds: [
+        new EmbedBuilder().setColor(embedColors.green).setTitle('Success!').setDescription('Joined voice channel and started playing music!')
+      ], ephemeral: isHidden
+    });
+    } else {
+      await interaction.reply({ embeds: [
+        new EmbedBuilder().setColor(embedColors.red).setTitle('Whoops!').setDescription("You're not in a voice channel!")
+      ], ephemeral: isHidden });
+    }
+    } catch (e) {
+      console.error(e);
+    }
   }
   if (interaction.commandName == 'disconnect') {
     if (interaction.user.id == connector || interaction.member.permissions.has(PermissionsBitField.Flags.MuteMembers)) {
