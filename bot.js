@@ -176,6 +176,7 @@ client.on('interactionCreate', async (interaction,message) => {
     }
   }
   if (interaction.commandName == 'disconnect') {
+    try {
     if (interaction.user.id == connector || interaction.member.permissions.has(PermissionsBitField.Flags.MuteMembers)) {
       connection.disconnect();
       await interaction.reply({
@@ -188,7 +189,13 @@ client.on('interactionCreate', async (interaction,message) => {
         ephemeral: isHidden
       });
     }
-  }
+    } catch(e) {
+      console.error(e);
+      await interaction.reply({ embeds: [
+        new EmbedBuilder().setColor(embedColors.red).setTitle('Whoops!').setDescription("The bot isn't in a voice channel!")
+      ], ephemeral: isHidden });
+    }
+    }
   if (interaction.commandName == 'reviews') {
     reviewNum++;
     var reviews = await fetch('https://store.steampowered.com/appreviews/1686940?json=1');
