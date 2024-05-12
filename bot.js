@@ -9,7 +9,7 @@ const { abilities } = require('./abilities');
 const fs = require('fs');
 const path = require('path');
 var configFile;
-var dev = false;
+var dev = true;
 var embedColors = {
   boplYellow: 0xfefe66,
   green: 0x54ff47,
@@ -28,7 +28,8 @@ var commandsList = [
   ['help','Provides help while using Bopl Bot.'],
   ['ping','Checks to see if the bot is online.'],
   ['music','Plays Bopl Battle music in your current voice channel!'],
-  ['disconnect','Disconnects Bopl Bot from your voice channel.']
+  ['disconnect','Disconnects Bopl Bot from your voice channel.'],
+  ['reviews','Gets the Steam reviews for Bopl Battle!']
 ]
 
 var musicArr = [
@@ -77,10 +78,13 @@ client.on('ready', () => {
 });
 
 client.on('messageCreate', (message) => {
-  if (message.content.toLowerCase().includes('kill yourself') || message.content.toLowerCase().includes('kys')) {
+  if (message.content.toLowerCase().includes('kill yourself') || message.content.toLowerCase().includes('kys') || message.content.toLowerCase().includes('kill myself') || message.content.toLowerCase().includes('kms')) {
     message.reply('https://media1.tenor.com/m/c5a_h8U1MzkAAAAC/nuh-uh-beocord.gif')
   }
 });
+
+var reviewNum = -1;
+var isTimedOut = false;
 
 client.on('interactionCreate', async (interaction,message) => {
     var isHidden = true;
@@ -135,15 +139,16 @@ client.on('interactionCreate', async (interaction,message) => {
       ephemeral: isHidden,
     });
   }
-  var connection = joinVoiceChannel({
-    channelId: interaction.member.voice.channel.id,
-    guildId: interaction.guildId,
-    adapterCreator: interaction.guild.voiceAdapterCreator,
-    selfDeaf: false,
-    selfMute: false
-  });
+  var connection;
   var connector;
   if (interaction.commandName == 'music') {
+      connection = joinVoiceChannel({
+        channelId: interaction.member.voice.channel.id,
+        guildId: interaction.guildId,
+        adapterCreator: interaction.guild.voiceAdapterCreator,
+        selfDeaf: false,
+        selfMute: false
+      });
       connector = interaction.user.id
       const player = createAudioPlayer();
       const resource = await createAudioResource(__dirname + randomArr(musicArr));
@@ -171,6 +176,19 @@ client.on('interactionCreate', async (interaction,message) => {
       });
     }
   }
+  if (interaction.commandName == 'reviews') {
+    reviewNum++;
+    var reviews = await fetch('https://store.steampowered.com/appreviews/1686940?json=1');
+    reviews = JSON.parse(await reviews.text());
+    console.log(reviews);
+    await interaction.reply({ embeds: [
+      new EmbedBuilder().setColor(embedColors.boplYellow).setTitle(`${reviews.reviews[reviewNum].votes_up} 👍 | ${reviews.reviews[reviewNum].votes_funny} 🤡 - ${reviews.reviews[reviewNum].author.playtime_forever} hours total`).setURL(`https://steamcommunity.com/profiles/${reviews.reviews[reviewNum].author.steamid}/recommended/${reviews.reviews[reviewNum].recommendationid}`).setDescription(reviews.reviews[reviewNum].review)
+    ], ephemeral: isHidden });
+    }
+    if (!isTimedOut) {
+      isTimedOut = true;
+      setTimeout(()=>{reviewNum = -1},480000)
+    }
 });
 // lets get it started 🔥🔥🔥🔥🔥🔥
 client.login(TOKEN);
