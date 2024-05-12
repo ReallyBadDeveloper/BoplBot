@@ -9,7 +9,7 @@ const { abilities } = require('./abilities');
 const fs = require('fs');
 const path = require('path');
 var configFile;
-var dev = true;
+var dev = false;
 var embedColors = {
   boplYellow: 0xfefe66,
   green: 0x54ff47,
@@ -85,6 +85,8 @@ client.on('messageCreate', (message) => {
 
 var reviewNum = -1;
 var isTimedOut = false;
+var connection;
+var connector;
 
 client.on('interactionCreate', async (interaction,message) => {
     var isHidden = true;
@@ -139,8 +141,6 @@ client.on('interactionCreate', async (interaction,message) => {
       ephemeral: isHidden,
     });
   }
-  var connection;
-  var connector;
   if (interaction.commandName == 'music') {
     try {
     if (interaction.member.voice.channel) {
