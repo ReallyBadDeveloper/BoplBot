@@ -4,8 +4,8 @@
   "description": "",
   "main": "bot.js",
   "scripts": {
-    "nodemon": "nodemon bot.js",
-    "node": "node bot.js"
+    "nodemon": "git pull && nodemon bot.js",
+    "node": "git pull && node bot.js"
   },
   "author": "Really Bad Dev",
   "license": "ISC",

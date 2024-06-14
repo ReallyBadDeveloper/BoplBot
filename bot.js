@@ -216,12 +216,14 @@ client.on('interactionCreate', async (interaction,message) => {
       var canvas = Canvas.createCanvas(1080,1080);
       var ctx = canvas.getContext('2d');
 
-      var template = await Canvas.loadImage('https://github.com/ReallyBadDeveloper/random-image-repo/blob/main/template.png?raw=true');
+      var template = await Canvas.loadImage('https://github.com/ReallyBadDeveloper/BoplBot/blob/main/media/pfp/template.png?raw=true');
+      var bg = await Canvas.loadImage('https://github.com/ReallyBadDeveloper/BoplBot/blob/main/media/pfp/bg.png?raw=true');
 
-      const { body } = await request(interaction.user.displayAvatarURL({ extension: 'jpg' }));
+      const { body } = await request(interaction.user.displayAvatarURL({ extension: 'png' }));
     const avatar = await Canvas.loadImage(await body.arrayBuffer());
 
-      ctx.drawImage(avatar, 252, 52, 619, 619);
+      ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
+      ctx.drawImage(avatar, 161, 115, 780, 780);
       ctx.drawImage(template, 0, 0, canvas.width, canvas.height);
 
       const attachment = new AttachmentBuilder(await canvas.encode('png'), { name: 'profile.png' });
