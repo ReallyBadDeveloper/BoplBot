@@ -3,11 +3,13 @@ const dotenv = require('dotenv').config();
 const TOKEN = process.env.TOKEN;
 const CLIENT_ID = process.env.CLIENT_ID;
 const { EmbedBuilder, SlashCommandStringOption, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField, } = require('discord.js');
-const { REST, Routes, SlashCommandBuilder } = require('discord.js');
+const { REST, Routes, SlashCommandBuilder, AttachmentBuilder } = require('discord.js');
 const { createAudioPlayer, noSubscriberBehavior, joinVoiceChannel, createAudioResource } = require('@discordjs/voice');
 const { abilities } = require('./abilities');
 const fs = require('fs');
 const path = require('path');
+const Canvas = require('@napi-rs/canvas');
+const { request } = require('undici');
 var configFile;
 var dev = false;
 var embedColors = {
@@ -29,7 +31,8 @@ var commandsList = [
   ['ping','Checks to see if the bot is online.'],
   ['music','Plays Bopl Battle music in your current voice channel!'],
   ['disconnect','Disconnects Bopl Bot from your voice channel.'],
-  ['reviews','Gets the Steam reviews for Bopl Battle!']
+  ['reviews','Gets the Steam reviews for Bopl Battle!'],
+  ['boplprofile','Makes a custom Bopl-themed profile picture!']
 ]
 
 var musicArr = [
@@ -209,6 +212,22 @@ client.on('interactionCreate', async (interaction,message) => {
       isTimedOut = true;
       setTimeout(()=>{reviewNum = -1},480000)
     }
+    if (interaction.commandName === 'boplprofile') {
+      var canvas = Canvas.createCanvas(1080,1080);
+      var ctx = canvas.getContext('2d');
+
+      var template = await Canvas.loadImage('https://github.com/ReallyBadDeveloper/random-image-repo/blob/main/template.png?raw=true');
+
+      const { body } = await request(interaction.user.displayAvatarURL({ extension: 'jpg' }));
+    const avatar = await Canvas.loadImage(await body.arrayBuffer());
+
+      ctx.drawImage(avatar, 252, 52, 619, 619);
+      ctx.drawImage(template, 0, 0, canvas.width, canvas.height);
+
+      const attachment = new AttachmentBuilder(await canvas.encode('png'), { name: 'profile.png' });
+
+    await interaction.reply({ files: [attachment], ephemeral: isHidden });
+  }
 });
 // lets get it started 🔥🔥🔥🔥🔥🔥
 client.login(TOKEN);
