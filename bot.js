@@ -213,7 +213,8 @@ client.on('interactionCreate', async (interaction,message) => {
       setTimeout(()=>{reviewNum = -1},480000)
     }
     if (interaction.commandName === 'boplprofile') {
-      var canvas = Canvas.createCanvas(1080,1080);
+      await interaction.deferReply({ ephemeral: true });
+      var canvas = Canvas.createCanvas(1080/2,1080/2);
       var ctx = canvas.getContext('2d');
 
       var template = await Canvas.loadImage('https://github.com/ReallyBadDeveloper/BoplBot/blob/main/media/pfp/template.png?raw=true');
@@ -223,12 +224,12 @@ client.on('interactionCreate', async (interaction,message) => {
     const avatar = await Canvas.loadImage(await body.arrayBuffer());
 
       ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
-      ctx.drawImage(avatar, 161, 115, 780, 780);
+      ctx.drawImage(avatar, 161/2, 115/2, 780/2, 780/2);
       ctx.drawImage(template, 0, 0, canvas.width, canvas.height);
 
       const attachment = new AttachmentBuilder(await canvas.encode('png'), { name: 'profile.png' });
 
-    await interaction.reply({ files: [attachment], ephemeral: isHidden });
+    await interaction.editReply({ files: [attachment], ephemeral: isHidden });
   }
 });
 // lets get it started 🔥🔥🔥🔥🔥🔥
