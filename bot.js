@@ -155,16 +155,26 @@ client.on('messageCreate', (message) => {
 	if (
 		message.content.toLowerCase().includes(' op') ||
 		message.content.toLowerCase().includes(' overpowered') ||
-		message.content.toLowerCase().includes('nerf')
+		message.content.toLowerCase().includes('nerf') ||
+		message.content.toLowerCase().includes('buff')
 	) {
 		var bblox = client.emojis.cache.get('1253098761618460742')
 		message.reply(`skill issue ${bblox}`)
 	}
 	if (message.content.toLowerCase().includes('<@164689064434466816>')) {
 		message.delete()
-		message.channel.send({ ephemeral: true, content: `<@${message.author.id}>`, embeds: [
-			new EmbedBuilder().setColor(embedColors.red).setTitle(`Don't ping Zapray!`).setDescription(`Zapray is busy right now, please ping a moderator for assistance/questions.`)
-		]})
+		message.channel.send({
+			ephemeral: true,
+			content: `<@${message.author.id}>`,
+			embeds: [
+				new EmbedBuilder()
+					.setColor(embedColors.red)
+					.setTitle(`Don't ping Zapray!`)
+					.setDescription(
+						`Zapray is busy right now, please ping a moderator for assistance/questions.`
+					),
+			],
+		})
 	}
 })
 
