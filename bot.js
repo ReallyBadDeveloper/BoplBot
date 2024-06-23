@@ -1,8 +1,8 @@
 // add .env data
-var dev = false;
+var dev = false
 const dotenv = require('dotenv').config()
-var TOKEN = null;
-var CLIENT_ID = null;
+var TOKEN = null
+var CLIENT_ID = null
 if (dev) {
 	TOKEN = process.env.DEVTOKEN
 	CLIENT_ID = process.env.DEVCLIENT_ID
@@ -154,7 +154,8 @@ client.on('messageCreate', (message) => {
 	}
 	if (
 		message.content.toLowerCase().includes(' op') ||
-		message.content.toLowerCase().includes(' overpowered') || message.content.toLowerCase().includes('nerf')
+		message.content.toLowerCase().includes(' overpowered') ||
+		message.content.toLowerCase().includes('nerf')
 	) {
 		var bblox = client.emojis.cache.get('1253098761618460742')
 		message.reply(`skill issue ${bblox}`)
@@ -244,11 +245,10 @@ client.on('interactionCreate', async (interaction, message) => {
 			embeds: [
 				new EmbedBuilder()
 					.setColor(embedColors.green)
-					.setTitle('Pong! :ping_pong:')
-					.setDescription(`
+					.setTitle('Pong! :ping_pong:').setDescription(`
 						**Response Ping:** ${Date.now() - interaction.createdTimestamp} ms\n
 						**API Ping:** ${client.ws.ping} ms\n
-						**Bot Uptime:** ${(Math.floor(process.uptime()) / 3600).toFixed(4)} hours`)
+						**Bot Uptime:** ${(Math.floor(process.uptime()) / 3600).toFixed(4)} hours`),
 			],
 			ephemeral: isHidden,
 		})
@@ -407,8 +407,9 @@ client.on('interactionCreate', async (interaction, message) => {
 		})
 	}
 	if (interaction.commandName === 'restart') {
+		interaction.deferReply()
 		exec('npm run nodemon', (error, stdout, stderr) => {
-			interaction.reply(stdout)
+			interaction.reply('Restarting...')
 			process.exitCode = 1
 		})
 	}
