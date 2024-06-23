@@ -160,6 +160,12 @@ client.on('messageCreate', (message) => {
 		var bblox = client.emojis.cache.get('1253098761618460742')
 		message.reply(`skill issue ${bblox}`)
 	}
+	if (message.content.toLowerCase().includes('<@164689064434466816>')) {
+		message.delete()
+		message.channel.send({ ephemeral: true, embeds: [
+			new EmbedBuilder().setColor(embedColors.red).setDescription(`<@${message.author.id}>, don't ping Zapray!`)
+		]})
+	}
 })
 
 var reviewNum = -1
