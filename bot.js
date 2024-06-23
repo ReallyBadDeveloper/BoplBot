@@ -1,5 +1,5 @@
 // add .env data
-var dev = true;
+var dev = false;
 const dotenv = require('dotenv').config()
 var TOKEN = null;
 var CLIENT_ID = null;
