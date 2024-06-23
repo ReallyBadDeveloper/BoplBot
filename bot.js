@@ -1,5 +1,5 @@
 // add .env data
-var dev = false;
+var dev = true;
 const dotenv = require('dotenv').config()
 var TOKEN = null;
 var CLIENT_ID = null;
@@ -244,7 +244,11 @@ client.on('interactionCreate', async (interaction, message) => {
 			embeds: [
 				new EmbedBuilder()
 					.setColor(embedColors.green)
-					.setTitle('Pong! :ping_pong:'),
+					.setTitle('Pong! :ping_pong:')
+					.setDescription(`
+						**Response Ping:** ${Date.now() - interaction.createdTimestamp} ms\n
+						**API Ping:** ${client.ws.ping} ms\n
+						**Bot Uptime:** ${Math.floor(process.uptime()) / 3600} hours`)
 			],
 			ephemeral: isHidden,
 		})
