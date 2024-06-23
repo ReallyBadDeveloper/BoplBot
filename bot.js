@@ -163,7 +163,7 @@ client.on('messageCreate', (message) => {
 	if (message.content.toLowerCase().includes('<@164689064434466816>')) {
 		message.delete()
 		message.channel.send({ ephemeral: true, content: `<@${message.author.id}>`, embeds: [
-			new EmbedBuilder().setColor(embedColors.red).setTitle(`Don't ping Zapray!`).setDescription(`Zapray has things to do besides interact with the community.`)
+			new EmbedBuilder().setColor(embedColors.red).setTitle(`Don't ping Zapray!`).setDescription(`Zapray is busy right now, please ping a moderator for assistance/questions.`)
 		]})
 	}
 })
