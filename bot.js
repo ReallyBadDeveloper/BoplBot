@@ -156,7 +156,7 @@ client.on('messageCreate', (message) => {
 		message.content.toLowerCase().includes(' op') ||
 		message.content.toLowerCase().includes(' overpowered') ||
 		message.content.toLowerCase().includes('nerf') ||
-		message.content.toLowerCase().includes('buff')
+		message.content.toLowerCase().includes('buff ')
 	) {
 		var bblox = client.emojis.cache.get('1253098761618460742')
 		message.reply(`skill issue ${bblox}`)
