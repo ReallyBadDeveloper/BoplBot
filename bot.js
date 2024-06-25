@@ -122,9 +122,11 @@ const client = new Client({
 
 client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`)
-	client.user.setActivity(client.guilds.cache.size + ' servers', {
-		type: ActivityType.Watching,
-	})
+	setInterval(() => {
+		client.user.setActivity(client.guilds.cache.size + ' servers', {
+			type: ActivityType.Watching,
+		})
+	}, 300000)
 	if (!dev) {
 		client.channels.fetch('1236702177515409469').then((channel) =>
 			channel.send({
