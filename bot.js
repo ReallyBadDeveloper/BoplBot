@@ -264,9 +264,7 @@ client.on('interactionCreate', async (interaction, message) => {
 				new EmbedBuilder()
 					.setColor(embedColors.green)
 					.setTitle('Pong! :ping_pong:').setDescription(`
-						**Response Ping:** ${Date.now() - interaction.createdTimestamp} ms\n
-						**API Ping:** ${client.ws.ping} ms\n
-						**Bot Uptime:** ${(Math.floor(process.uptime()) / 3600).toFixed(4)} hours`),
+						**Response Ping:** ${Date.now() - interaction.createdTimestamp} ms\n**API Ping:** ${client.ws.ping} ms\n**Bot Uptime:** ${(Math.floor(process.uptime()) / 3600).toFixed(4)} hours`),
 			],
 			ephemeral: isHidden,
 		})
