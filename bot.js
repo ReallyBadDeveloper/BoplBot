@@ -18,6 +18,9 @@ const {
 	ButtonBuilder,
 	ButtonStyle,
 	PermissionsBitField,
+	Message,
+	MessageMentions,
+	MessageMentionOptions
 } = require('discord.js')
 const {
 	REST,
@@ -468,6 +471,18 @@ client.on('interactionCreate', async (interaction, message) => {
 		})
 	}
 	if (interaction.commandName === 'echo') {
+		if (interaction.options.getString('message').includes('<@&') || interaction.options.getString('message').includes('@everyone') || interaction.options.getString('message').includes('@here')) {
+			await interaction.reply({
+				embeds: [
+					new EmbedBuilder()
+						.setColor(embedColors.red)
+						.setTitle('Nope!')
+						.setDescription('You cannot mention roles, `@everyone`, or `@here`.'),
+				],
+				ephemeral: true,
+			})
+			return;
+		}
 		await interaction.reply({
 			embeds: [
 				new EmbedBuilder()
@@ -477,7 +492,7 @@ client.on('interactionCreate', async (interaction, message) => {
 			],
 			ephemeral: true,
 		})
-		interaction.channel.send(`### <@${interaction.user.id}> says:\n${interaction.options.getString('message')}`)
+		interaction.channel.send({ content: `### <@${interaction.user.id}> says:\n${interaction.options.getString('message')}` })
 	}
 })
 // lets get it started 🔥🔥🔥🔥🔥🔥
