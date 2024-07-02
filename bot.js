@@ -1,5 +1,5 @@
 // add .env data
-var dev = false
+var dev = require('./config.json').dev
 const dotenv = require('dotenv').config()
 var TOKEN = null
 var CLIENT_ID = null
@@ -57,6 +57,7 @@ var commandsList = [
 	['disconnect', 'Disconnects Bopl Bot from your voice channel.'],
 	['reviews', 'Gets the Steam reviews for Bopl Battle!'],
 	['boplprofile', 'Makes a custom Bopl-themed profile picture!'],
+	['echo', 'Says something as Bopl Bot in different channels!'],
 ]
 
 var musicArr = [
@@ -82,7 +83,9 @@ var botCommands = [
 		.setDescription('Provides uptime info about Bopl Bot.'),
 	new SlashCommandBuilder()
 		.setName('music')
-		.setDescription('Plays Bopl Battle music in your current voice channel!'),
+		.setDescription(
+			'Plays Bopl Battle music in your current voice channel!'
+		),
 	new SlashCommandBuilder()
 		.setName('disconnect')
 		.setDescription('Disconnects Bopl Bot from your voice channel.'),
@@ -94,14 +97,30 @@ var botCommands = [
 		.setDescription('Makes a custom Bopl-themed profile picture!')
 		.addUserOption((user) => {
 			user.setName('user')
-			user.setDescription('The user to grab the profile of. Defaults to you.')
-			return user;
+			user.setDescription(
+				'The user to grab the profile of. Defaults to you.'
+			)
+			return user
+		}),
+	new SlashCommandBuilder()
+		.setName('echo')
+		.setDescription('Says something as Bopl Bot in this channel!')
+		.addStringOption((string) => {
+			string.setName('message')
+			string.setMaxLength(1000)
+			string.setRequired(true)
+			string.setDescription(
+				'The message to send. Note: Most Markdown breaks the message.'
+			)
+			return string
 		}),
 ]
 var adminCommands = [
 	new SlashCommandBuilder()
 		.setName('restart')
-		.setDescription('Fetches the latest version of Bopl Bot and restarts it.'),
+		.setDescription(
+			'Fetches the latest version of Bopl Bot and restarts it.'
+		),
 ]
 
 const rest = new REST({ version: '10' }).setToken(TOKEN)
@@ -412,7 +431,7 @@ client.on('interactionCreate', async (interaction, message) => {
 		await interaction.deferReply({ ephemeral: true })
 		var canvas = Canvas.createCanvas(1080 / 2, 1080 / 2)
 		var ctx = canvas.getContext('2d')
-		var user;
+		var user
 		var template = await Canvas.loadImage(
 			'https://github.com/ReallyBadDeveloper/BoplBot/blob/main/media/pfp/template.png?raw=true'
 		)
@@ -420,7 +439,7 @@ client.on('interactionCreate', async (interaction, message) => {
 			'https://github.com/ReallyBadDeveloper/BoplBot/blob/main/media/pfp/bg.png?raw=true'
 		)
 		if (!interaction.options.getUser('user')) {
-			user = interaction.user;
+			user = interaction.user
 		} else {
 			user = interaction.options.getUser('user')
 		}
@@ -448,6 +467,19 @@ client.on('interactionCreate', async (interaction, message) => {
 			interaction.reply('Restarting...')
 			process.exitCode = 1
 		})
+	}
+	if (interaction.commandName === 'echo') {
+		await interaction.reply({
+			embeds: [
+				new EmbedBuilder()
+					.setColor(embedColors.green)
+					.setTitle('Success!')
+					.setDescription('Message should be sent shortly!'),
+			],
+			ephemeral: true,
+		})
+		interaction.channel.send(`### <@${interaction.user.id}> says:\n\`\`\`${interaction.options.getString('message')}\`\`\`
+			`)
 	}
 })
 // lets get it started 🔥🔥🔥🔥🔥🔥
