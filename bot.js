@@ -463,9 +463,8 @@ client.on('interactionCreate', async (interaction, message) => {
 	}
 	if (interaction.commandName === 'restart') {
 		interaction.deferReply()
-		exec('npm run nodemon', (error, stdout, stderr) => {
-			interaction.reply('Restarting...')
-			process.exitCode = 1
+		exec('git pull', (error, stdout, stderr) => {
+			interaction.editReply(stdout)
 		})
 	}
 	if (interaction.commandName === 'echo') {
@@ -478,8 +477,7 @@ client.on('interactionCreate', async (interaction, message) => {
 			],
 			ephemeral: true,
 		})
-		interaction.channel.send(`### <@${interaction.user.id}> says:\n\`\`\`${interaction.options.getString('message')}\`\`\`
-			`)
+		interaction.channel.send(`### <@${interaction.user.id}> says:\n${interaction.options.getString('message')}`)
 	}
 })
 // lets get it started 🔥🔥🔥🔥🔥🔥
