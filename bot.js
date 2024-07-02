@@ -428,7 +428,7 @@ client.on('interactionCreate', async (interaction, message) => {
 		}, 480000)
 	}
 	if (interaction.commandName === 'boplprofile') {
-		await interaction.deferReply({ ephemeral: true })
+		await interaction.deferReply({ ephemeral: isHidden })
 		var canvas = Canvas.createCanvas(1080 / 2, 1080 / 2)
 		var ctx = canvas.getContext('2d')
 		var user
