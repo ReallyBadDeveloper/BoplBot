@@ -1,5 +1,5 @@
 // add .env data
-var dev = false
+var dev = true
 const dotenv = require('dotenv').config()
 var TOKEN = null
 var CLIENT_ID = null
@@ -51,16 +51,12 @@ var randomArr = function (arr) {
 var commandsList = [
 	['random-combo', 'Sends a random combination of Bopl Battle abilities!'],
 	['abilities', 'Displays every ability in Bopl Battle!'],
-	['help', 'Provides help while using Bopl Bot.'],
-	['ping', 'Checks to see if the bot is online.'],
+	['help', 'This command.'],
+	['ping', 'Provides uptime info about Bopl Bot.'],
 	['music', 'Plays Bopl Battle music in your current voice channel!'],
 	['disconnect', 'Disconnects Bopl Bot from your voice channel.'],
 	['reviews', 'Gets the Steam reviews for Bopl Battle!'],
 	['boplprofile', 'Makes a custom Bopl-themed profile picture!'],
-]
-
-var adminCommandsList = [
-	['restart', 'Fetches the latest version of the bot and restarts it.'],
 ]
 
 var musicArr = [
@@ -71,24 +67,42 @@ var musicArr = [
 	'/media/5.mp3',
 ]
 
-var botCommands = []
-var adminCommands = []
-
-for (const i in commandsList) {
-	botCommands.push(
-		new SlashCommandBuilder()
-			.setName(commandsList[i][0])
-			.setDescription(commandsList[i][1])
-	)
-}
-
-for (const i in adminCommandsList) {
-	adminCommands.push(
-		new SlashCommandBuilder()
-			.setName(adminCommandsList[i][0])
-			.setDescription(adminCommandsList[i][1])
-	)
-}
+var botCommands = [
+	new SlashCommandBuilder()
+		.setName('random-combo')
+		.setDescription('Sends a random combination of Bopl Battle abilities!'),
+	new SlashCommandBuilder()
+		.setName('abilities')
+		.setDescription('Displays every ability in Bopl Battle!'),
+	new SlashCommandBuilder()
+		.setName('help')
+		.setDescription('Provides help while using Bopl Bot.'),
+	new SlashCommandBuilder()
+		.setName('ping')
+		.setDescription('Provides uptime info about Bopl Bot.'),
+	new SlashCommandBuilder()
+		.setName('music')
+		.setDescription('Plays Bopl Battle music in your current voice channel!'),
+	new SlashCommandBuilder()
+		.setName('disconnect')
+		.setDescription('Disconnects Bopl Bot from your voice channel.'),
+	new SlashCommandBuilder()
+		.setName('reviews')
+		.setDescription('Gets the Steam reviews for Bopl Battle!'),
+	new SlashCommandBuilder()
+		.setName('boplprofile')
+		.setDescription('Makes a custom Bopl-themed profile picture!')
+		.addUserOption((user) => {
+			user.setName('user')
+			user.setDescription('The user to grab the profile of. Defaults to you.')
+			return user;
+		}),
+]
+var adminCommands = [
+	new SlashCommandBuilder()
+		.setName('restart')
+		.setDescription('Fetches the latest version of Bopl Bot and restarts it.'),
+]
 
 const rest = new REST({ version: '10' }).setToken(TOKEN)
 
@@ -264,7 +278,9 @@ client.on('interactionCreate', async (interaction, message) => {
 				new EmbedBuilder()
 					.setColor(embedColors.green)
 					.setTitle('Pong! :ping_pong:').setDescription(`
-						**Response Ping:** ${Date.now() - interaction.createdTimestamp} ms\n**API Ping:** ${client.ws.ping} ms\n**Bot Uptime:** ${(Math.floor(process.uptime()) / 3600).toFixed(4)} hours`),
+						**Response Ping:** ${Date.now() - interaction.createdTimestamp} ms\n
+						**API Ping:** ${client.ws.ping} ms\n
+						**Bot Uptime:** ${(Math.floor(process.uptime()) / 3600).toFixed(4)} hours`),
 			],
 			ephemeral: isHidden,
 		})
@@ -396,16 +412,20 @@ client.on('interactionCreate', async (interaction, message) => {
 		await interaction.deferReply({ ephemeral: true })
 		var canvas = Canvas.createCanvas(1080 / 2, 1080 / 2)
 		var ctx = canvas.getContext('2d')
-
+		var user;
 		var template = await Canvas.loadImage(
 			'https://github.com/ReallyBadDeveloper/BoplBot/blob/main/media/pfp/template.png?raw=true'
 		)
 		var bg = await Canvas.loadImage(
 			'https://github.com/ReallyBadDeveloper/BoplBot/blob/main/media/pfp/bg.png?raw=true'
 		)
-
+		if (!interaction.options.getUser('user')) {
+			user = interaction.user;
+		} else {
+			user = interaction.options.getUser('user')
+		}
 		const { body } = await request(
-			interaction.user.displayAvatarURL({ extension: 'png' })
+			user.displayAvatarURL({ extension: 'png' })
 		)
 		const avatar = await Canvas.loadImage(await body.arrayBuffer())
 
