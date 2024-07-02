@@ -64,6 +64,7 @@ var commandsList = [
 ]
 
 var musicArr = [
+	'/media/0.mp3',
 	'/media/1.mp3',
 	'/media/2.mp3',
 	'/media/3.mp3',
