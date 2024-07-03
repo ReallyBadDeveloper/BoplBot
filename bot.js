@@ -1,5 +1,6 @@
 // add .env data
 var dev = require('./config.json').dev
+var version = '1.3.0'
 const dotenv = require('dotenv').config()
 var TOKEN = null
 var CLIENT_ID = null
@@ -61,6 +62,7 @@ var commandsList = [
 	['reviews', 'Gets the Steam reviews for Bopl Battle!'],
 	['boplprofile', 'Makes a custom Bopl-themed profile picture!'],
 	['echo', 'Says something as Bopl Bot in different channels!'],
+	['info', 'Provides general info about the bot.']
 ]
 
 var musicArr = [
@@ -118,6 +120,9 @@ var botCommands = [
 			)
 			return string
 		}),
+	new SlashCommandBuilder()
+		.setName('info')
+		.setDescription('Provides general info about the bot.'),
 ]
 var adminCommands = [
 	new SlashCommandBuilder()
@@ -494,6 +499,12 @@ client.on('interactionCreate', async (interaction, message) => {
 			ephemeral: true,
 		})
 		interaction.channel.send({ content: `### <@${interaction.user.id}> says:\n${interaction.options.getString('message')}` })
+	}
+	if (interaction.commandName === 'info') {
+		var bheart = client.emojis.cache.get('1258056142442201178');
+		await interaction.reply({ embeds: [
+			new EmbedBuilder().setColor(embedColors.boplYellow).setTitle(`Bopl Bot v${version}`).setDescription(`**Developer**: <@880898058483814430>\n**Support Server**: https://discord.gg/ZhyhsVNW65\n**Bopl Battle Server**: https://discord.gg/hDmtrggySN\n**GitHub Repository**: https://github.com/ReallyBadDeveloper/BoplBot\n\nThanks for using Bopl Bot! ${bheart}`)
+		], ephemeral: true })
 	}
 })
 // lets get it started 🔥🔥🔥🔥🔥🔥
