@@ -2,6 +2,9 @@
 var dev = require('./config.json').dev
 var version = '1.3.0'
 const dotenv = require('dotenv').config()
+const friendcodes = require('./friendcodes')
+friendcodes.init()
+console.log(friendcodes.raw)
 var TOKEN = null
 var CLIENT_ID = null
 if (dev) {
@@ -21,7 +24,8 @@ const {
 	PermissionsBitField,
 	Message,
 	MessageMentions,
-	MessageMentionOptions
+	MessageMentionOptions,
+	SlashCommandSubcommandBuilder
 } = require('discord.js')
 const {
 	REST,
@@ -62,7 +66,8 @@ var commandsList = [
 	['reviews', 'Gets the Steam reviews for Bopl Battle!'],
 	['boplprofile', 'Makes a custom Bopl-themed profile picture!'],
 	['echo', 'Says something as Bopl Bot in different channels!'],
-	['info', 'Provides general info about the bot.']
+	['info', 'Provides general info about the bot.'],
+	['friendcode get', `Gets a user's Steam friendcode.`]
 ]
 
 var musicArr = [
@@ -123,6 +128,14 @@ var botCommands = [
 	new SlashCommandBuilder()
 		.setName('info')
 		.setDescription('Provides general info about the bot.'),
+	new SlashCommandBuilder()
+		.setName('friendcodes')
+		.setDescription('A command category for friendcodes.')
+		.addSubcommand(subcommand =>
+			subcommand
+				.setName('get')
+				.setDescription('Gets a user\'s Steam friendcode.')
+				.addUserOption(option => option.setName('user').setDescription('The user')))
 ]
 var adminCommands = [
 	new SlashCommandBuilder()
@@ -505,6 +518,12 @@ client.on('interactionCreate', async (interaction, message) => {
 		await interaction.reply({ embeds: [
 			new EmbedBuilder().setColor(embedColors.boplYellow).setTitle(`Bopl Bot v${version}`).setDescription(`**Developer**: <@880898058483814430>\n**Support Server**: https://discord.gg/ZhyhsVNW65\n**Bopl Battle Server**: https://discord.gg/hDmtrggySN\n**GitHub Repository**: https://github.com/ReallyBadDeveloper/BoplBot\n\nThanks for using Bopl Bot! ${bheart}`)
 		], ephemeral: true })
+	}
+	if (interaction.commandName === 'friendcodes') {
+		if (interaction.options.getSubcommand() === 'get') {
+			console.log(friendcodes.get(interaction.user.id))
+			interaction.reply({ content: 'a', ephemeral: true})
+		}
 	}
 })
 // lets get it started 🔥🔥🔥🔥🔥🔥
