@@ -4,8 +4,10 @@
   "description": "",
   "main": "bot.js",
   "scripts": {
-    "nodemon": "git pull && nodemon bot.js",
-    "node": "git pull && node bot.js"
+    "nodemon": "git pull && nodemon ./src/bot.js",
+    "node": "git pull && node ./src/bot.js",
+    "dev": "nodemon ./src/bot.js",
+    "setup": "node setup.js"
   },
   "author": "Really Bad Dev",
   "license": "ISC",
@@ -13,12 +15,14 @@
     "@discordjs/voice": "^0.17.0",
     "@napi-rs/canvas": "^0.1.53",
     "avconv": "^3.1.0",
-    "discord.js": "^14.14.1",
+    "discord.js": "^14.0.0",
     "dotenv": "^16.4.5",
     "ffmpeg": "^0.0.4",
     "ffmpeg-static": "^5.2.0",
     "libsodium-wrappers": "^0.7.13",
-    "nodemon": "^3.1.0",
-    "undici": "^6.19.0"
+    "undici": "^6.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
   }
 }
