@@ -55,6 +55,19 @@ module.exports = {
       }
     } else if (subcommand === 'set') {
       const friendCode = interaction.options.getString('code');
+      if(friendCode.toString().length>=15){
+        await interaction.reply({
+          embeds: [
+            new EmbedBuilder()
+              .setColor(embedColors.red)
+              .setTitle('Friend Code Not Set')
+              .setDescription(`Your friend code exceeded the max length of 15 digits.`)
+          ],
+          ephemeral: true,
+        });
+
+        return
+      }
       SetCode(interaction.user.id, friendCode);
       await interaction.reply({
         embeds: [
