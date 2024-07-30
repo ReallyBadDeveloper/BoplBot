@@ -1,8 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { abilities } = require('../abilities');
-const embedColors = {
-  boplYellow: 0xfefe66,
-};
+const embedColors = require("../embedColors.js")
 
 module.exports = {
   data: new SlashCommandBuilder()

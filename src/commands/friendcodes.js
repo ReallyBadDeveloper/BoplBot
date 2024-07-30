@@ -1,9 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { GetCode, SetCode } = require('../database');
-const embedColors = {
-  green: 0x54ff47,
-  red: 0xff0000,
-};
+const embedColors = require("../embedColors.js")
 
 module.exports = {
   data: new SlashCommandBuilder()

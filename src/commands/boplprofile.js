@@ -1,9 +1,7 @@
 const { SlashCommandBuilder, AttachmentBuilder } = require('discord.js');
 const Canvas = require('@napi-rs/canvas');
 const { request } = require('undici');
-const embedColors = {
-  boplYellow: 0xfefe66,
-};
+const embedColors = require("../embedColors.js")
 
 module.exports = {
   data: new SlashCommandBuilder()
