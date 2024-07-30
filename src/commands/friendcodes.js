@@ -20,7 +20,7 @@ module.exports = {
       subcommand
         .setName('set')
         .setDescription('Set your friend code.')
-        .addStringOption(option => 
+        .addNumberOption(option => 
           option.setName('code')
             .setDescription('Your friend code')
             .setRequired(true)
