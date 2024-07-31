@@ -1,7 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const embedColors = {
-  boplYellow: 0xfefe66,
-};
+const embedColors = require("../embedColors.js")
 
 const commandsList = [
   ['random-combo', 'Sends a random combination of Bopl Battle abilities!'],

@@ -2,18 +2,28 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { EmbedBuilder } = require('discord.js');
 // const fetch = require('node-fetch');
 
+// Review caching/updating system thingy.
+let reviews = {}
+let lastReviewUpdate = 0;
+async function tryUpdateReviews(){
+    if(lastReviewUpdate+60000>Date.now())return
+    lastReviewUpdate = Date.now()
+    let response = await fetch('https://store.steampowered.com/appreviews/1686940?json=1');
+    reviews = await response.json();
+}
+tryUpdateReviews()
+
+let reviewNum = -1;
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('reviews')
         .setDescription('Gets the Steam reviews for Bopl Battle!'),
 
     async execute(interaction) {
-        let reviewNum = -1;
         const isHidden = false; 
 
         try {
-            const response = await fetch('https://store.steampowered.com/appreviews/1686940?json=1');
-            const reviews = await response.json();
+            tryUpdateReviews() // We don't really need to await because we already have the stuff cached.
 
             reviewNum++; 
 

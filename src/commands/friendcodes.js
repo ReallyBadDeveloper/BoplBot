@@ -1,9 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { GetCode, SetCode } = require('../database');
-const embedColors = {
-  green: 0x54ff47,
-  red: 0xff0000,
-};
+const embedColors = require("../embedColors.js")
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -23,7 +20,7 @@ module.exports = {
       subcommand
         .setName('set')
         .setDescription('Set your friend code.')
-        .addStringOption(option => 
+        .addNumberOption(option => 
           option.setName('code')
             .setDescription('Your friend code')
             .setRequired(true)
@@ -58,6 +55,19 @@ module.exports = {
       }
     } else if (subcommand === 'set') {
       const friendCode = interaction.options.getString('code');
+      if(friendCode.toString().length>=15){
+        await interaction.reply({
+          embeds: [
+            new EmbedBuilder()
+              .setColor(embedColors.red)
+              .setTitle('Friend Code Not Set')
+              .setDescription(`Your friend code exceeded the max length of 15 digits.`)
+          ],
+          ephemeral: true,
+        });
+
+        return
+      }
       SetCode(interaction.user.id, friendCode);
       await interaction.reply({
         embeds: [

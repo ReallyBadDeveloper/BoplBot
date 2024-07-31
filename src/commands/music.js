@@ -1,9 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder, PermissionsBitField } = require('discord.js');
 const { createAudioPlayer, joinVoiceChannel, createAudioResource } = require('@discordjs/voice');
-const embedColors = {
-  green: 0x54ff47,
-  red: 0xbf2626,
-};
+const embedColors = require("../embedColors.js")
 
 module.exports = {
   data: new SlashCommandBuilder()
