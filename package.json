@@ -8,7 +8,7 @@
     "node": "git pull && node ./src/bot.js",
     "dev": "nodemon ./src/bot.js",
     "setup": "node setup.js",
-    "prod": "pm2"
+    "prod": "pm2 start ./src/bot.js"
   },
   "author": "Really Bad Dev",
   "license": "ISC",
