@@ -7,7 +7,8 @@
     "nodemon": "git pull && nodemon ./src/bot.js",
     "node": "git pull && node ./src/bot.js",
     "dev": "nodemon ./src/bot.js",
-    "setup": "node setup.js"
+    "setup": "node setup.js",
+    "prod": "pm2"
   },
   "author": "Really Bad Dev",
   "license": "ISC",
@@ -21,7 +22,8 @@
     "ffmpeg": "^0.0.4",
     "ffmpeg-static": "^5.2.0",
     "libsodium-wrappers": "^0.7.13",
-    "undici": "^6.19.2"
+    "undici": "^6.19.2",
+    "pm2": "^5.4.2"
   },
   "devDependencies": {
     "nodemon": "^3.1.4"
