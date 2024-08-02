@@ -7,6 +7,7 @@ const { Routes } = require('discord-api-types/v10');
 const dotenv = require('dotenv');
 const { exec } = require('child_process');
 const { abilities } = require('./abilities');
+const { match } = require('assert');
 
 dotenv.config();
 
@@ -108,10 +109,10 @@ client.on('messageCreate', async (message) => {
       console.log(chalk.yellow('Detected and responded to harmful message.'));
     }
     if (
-      message.content.toLowerCase().includes(' op') ||
-      message.content.toLowerCase().includes(' overpowered') ||
-      message.content.toLowerCase().includes('nerf') ||
-      message.content.toLowerCase().includes('buff ')
+      message.content.toLowerCase().match(/(op)(?![0-z])+/g) ||
+      message.content.toLowerCase().match(/(overpowered)+/g) ||
+      message.content.toLowerCase().match(/(nerf)(?!ed)+/g) ||
+      message.content.toLowerCase().match(/(buff)(?!ed)+/g)
     ) {
       var bblox = client.emojis.cache.get('1253098761618460742');
       message.reply(`skill issue ${bblox}`);
