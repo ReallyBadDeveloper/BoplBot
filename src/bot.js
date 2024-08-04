@@ -109,7 +109,7 @@ client.on('messageCreate', async (message) => {
       console.log(chalk.yellow('Detected and responded to harmful message.'));
     }
     if (
-      message.content.toLowerCase().match(/(op)(?![0-z])+/g) ||
+      message.content.toLowerCase().match(/ (op)(?![0-z])+/g) ||
       message.content.toLowerCase().match(/(overpowered)+/g) ||
       message.content.toLowerCase().match(/(nerf)(?!ed)+/g) ||
       message.content.toLowerCase().match(/(buff)(?!ed)+/g)
