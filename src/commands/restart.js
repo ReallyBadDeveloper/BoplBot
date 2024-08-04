@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { exec } = require('child_process');
 const embedColors = require("../embedColors.js")
+const ephemeralifier = require('../ephemeralifier.js')
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -15,9 +16,10 @@ module.exports = {
             .setTitle('Restarting...')
             .setDescription('The bot will restart shortly.'),
         ],
-        ephemeral: true,
+        ephemeral: ephemeralifier.isHidden(interaction),
       });
-
+      
+      exec('git pull');
       exec('pm2 restart BoplBot');
     } catch (error) {
       console.error(error);

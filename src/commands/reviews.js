@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { EmbedBuilder } = require('discord.js');
+const ephemeralifier = require('../ephemeralifier.js')
 // const fetch = require('node-fetch');
 
 // Review caching/updating system thingy.
@@ -39,14 +40,14 @@ module.exports = {
                         .setURL(`https://steamcommunity.com/profiles/${reviews.reviews[reviewNum].author.steamid}/recommended/${reviews.reviews[reviewNum].recommendationid}`)
                         .setDescription(reviews.reviews[reviewNum].review)
                 ],
-                ephemeral: isHidden 
+                ephemeral: ephemeralifier.isHidden(interaction) 
             });
 
         } catch (error) {
             console.error('Error fetching Steam reviews:', error);
             await interaction.reply({
                 content: 'Failed to fetch Steam reviews.',
-                ephemeral: isHidden 
+                ephemeral: ephemeralifier.isHidden(interaction) 
             });
         }
     },

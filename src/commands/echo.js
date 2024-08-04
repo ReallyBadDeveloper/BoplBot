@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const embedColors = require("../embedColors.js")
+const ephemeralifier = require('../ephemeralifier.js')
 
 module.exports = {
   data: new SlashCommandBuilder()

@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const embedColors = require("../embedColors.js")
+const ephemeralifier = require('../ephemeralifier.js')
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -20,7 +21,7 @@ module.exports = {
           .setDescription(botInfo)
           .addFields({ name: 'More Info', value: moreInfo }),
       ],
-      ephemeral: true,
+      ephemeral: ephemeralifier.isHidden(interaction),
     });
   },
 };

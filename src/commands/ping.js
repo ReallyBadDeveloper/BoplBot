@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const embedColors = require("../embedColors.js")
+const ephemeralifier = require('../ephemeralifier.js')
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -17,7 +18,7 @@ module.exports = {
             **Bot Uptime:** ${(Math.floor(process.uptime()) / 3600).toFixed(4)} hours
           `),
       ],
-      ephemeral: true,
+      ephemeral: ephemeralifier.isHidden(interaction),
     });
   },
 };

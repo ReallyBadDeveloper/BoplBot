@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const embedColors = require("../embedColors.js")
+const ephemeralifier = require('../ephemeralifier.js')
 
 const commandsList = [
   ['random-combo', 'Sends a random combination of Bopl Battle abilities!'],
@@ -28,7 +29,7 @@ module.exports = {
           .setTitle('Commands')
           .setDescription(cmdString),
       ],
-      ephemeral: true,
+      ephemeral: ephemeralifier.isHidden(interaction),
     });
   },
 };

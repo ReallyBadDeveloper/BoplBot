@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { GetCode, SetCode } = require('../database');
 const embedColors = require("../embedColors.js")
+const ephemeralifier = require('../ephemeralifier.js')
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -40,7 +41,7 @@ module.exports = {
               .setTitle(`${user.username}'s Friend Code`)
               .setDescription(`${user.username}'s friend code is: ${friendCode}`)
           ],
-          ephemeral: true,
+          ephemeral: ephemeralifier.isHidden(interaction),
         });
       } else {
         await interaction.reply({
@@ -50,7 +51,7 @@ module.exports = {
               .setTitle('No Friend Code Found')
               .setDescription(`${user.username} has not set a friend code yet.`)
           ],
-          ephemeral: true,
+          ephemeral: ephemeralifier.isHidden(interaction),
         });
       }
     } else if (subcommand === 'set') {
@@ -63,7 +64,7 @@ module.exports = {
               .setTitle('Friend Code Not Set')
               .setDescription(`Your friend code exceeded the max length of 15 digits.`)
           ],
-          ephemeral: true,
+          ephemeral: ephemeralifier.isHidden(interaction),
         });
 
         return
@@ -76,7 +77,7 @@ module.exports = {
             .setTitle('Friend Code Set')
             .setDescription(`Your friend code has been set to: ${friendCode}`)
         ],
-        ephemeral: true,
+        ephemeral: ephemeralifier.isHidden(interaction),
       });
     }
   },

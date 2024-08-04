@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder, PermissionsBitField } = require('discord.js');
 const { createAudioPlayer, joinVoiceChannel, createAudioResource } = require('@discordjs/voice');
 const embedColors = require("../embedColors.js")
+const ephemeralifier = require('../ephemeralifier.js')
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -28,7 +29,7 @@ module.exports = {
             .setTitle('Error')
             .setDescription('You need to be in a voice channel to use this command.'),
         ],
-        ephemeral: true,
+        ephemeral: ephemeralifier.isHidden(interaction ),
       });
       return;
     }
@@ -41,7 +42,7 @@ module.exports = {
             .setTitle('Error')
             .setDescription('I cannot join your voice channel.'),
         ],
-        ephemeral: true,
+        ephemeral: ephemeralifier.isHidden(interaction ),
       });
       return;
     }
@@ -69,7 +70,7 @@ module.exports = {
           .setTitle('Playing Music')
           .setDescription(`Now playing: ${track.replace('_', ' ')}`),
       ],
-      ephemeral: true,
+      ephemeral: ephemeralifier.isHidden(interaction ),
     });
   },
 };
