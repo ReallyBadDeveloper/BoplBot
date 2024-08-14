@@ -2,6 +2,7 @@ const { SlashCommandBuilder, AttachmentBuilder } = require('discord.js');
 const Canvas = require('@napi-rs/canvas');
 const { request } = require('undici');
 const embedColors = require("../embedColors.js")
+const ephemeralifier = require('../ephemeralifier.js')
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -12,7 +13,7 @@ module.exports = {
         .setDescription('The user to grab the profile of. Defaults to you.')
     ),
   async execute(interaction) {
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ ephemeral: ephemeralifier.isHidden(interaction) });
     var canvas = Canvas.createCanvas(1080 / 2, 1080 / 2);
     var ctx = canvas.getContext('2d');
     var user = interaction.options.getUser('user') || interaction.user;
@@ -32,7 +33,7 @@ module.exports = {
 
     await interaction.editReply({
       files: [attachment],
-      ephemeral: true,
+      ephemeral: ephemeralifier.isHidden(interaction),
     });
   },
 };

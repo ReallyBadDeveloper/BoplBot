@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { abilities } = require('../abilities');
 const embedColors = require("../embedColors.js")
+const ephemeralifier = require('../ephemeralifier.js')
 
 let emojiString = undefined
 module.exports = {
@@ -17,7 +18,7 @@ module.exports = {
           .setTitle('Abilities')
           .setDescription(emojiString),
       ],
-      ephemeral: true,
+      ephemeral: ephemeralifier.isHidden(interaction),
     });
   },
 };

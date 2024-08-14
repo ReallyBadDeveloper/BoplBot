@@ -30,6 +30,7 @@ var abilities = [
     '1236386060037128272', // Drill
     '1236387738778079366', // Grapple
     '1236385980811055114', // Beam
+    '1273285208665489469', // Duplicator
 ];
 
 exports.abilities = abilities;
