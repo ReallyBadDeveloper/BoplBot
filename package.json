@@ -2,7 +2,7 @@
   "name": "bopl-bot",
   "version": "1.0.0",
   "description": "",
-  "main": "bot.js",
+  "main": "./src/bot.js",
   "scripts": {
     "nodemon": "git pull && nodemon ./src/bot.js",
     "node": "git pull && node ./src/bot.js",
